@@ -1,12 +1,18 @@
 {
   "manifest_version": 3,
-  "name": "VTS",
+  "name": "VTS - 竖直标签预览切换器",
   "version": "1.0.0",
-  "description": "Ctrl+Space quick tab switcher with preview",
+  "author": "77-223255",
+  "homepage_url": "https://github.com/77-223255/extension",
+  "minimum_chrome_version": "102",
+  "description": "Ctrl+Space 快捷键打开竖直标签列表，支持缩略图预览和侧边特写，快速切换浏览器标签页",
   "permissions": ["tabs", "scripting", "commands", "storage", "alarms"],
   "host_permissions": ["<all_urls>"],
   "background": { "service_worker": "background.js" },
-  "action": { "default_title": "VTS", "default_popup": "popup.html" },
+  "action": {
+    "default_title": "VTS - Ctrl+Space 快速切换",
+    "default_popup": "popup.html"
+  },
   "commands": {
     "open-overlay": {
       "suggested_key": { "default": "Ctrl+Space", "mac": "Ctrl+Space" },
@@ -19,5 +25,9 @@
     "css": ["overlay.css"],
     "run_at": "document_idle"
   }],
-  "icons": { "16": "icons/icon16.png", "48": "icons/icon48.png", "128": "icons/icon128.png" }
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
 }

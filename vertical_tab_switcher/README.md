@@ -1,47 +1,76 @@
-# VTS
+<p align="center">
+  <strong>English</strong> | <a href="README.zh-CN.md">简体中文</a>
+</p>
 
-Chrome extension for quick tab switching with preview.
+<p align="center">
+  <img src="icons/icon128.png" width="96" height="96">
+</p>
 
-## Features
+<h1 align="center">VTS</h1>
 
-- `Ctrl+Space` to open tab switcher
-- Thumbnail preview for each tab
-- Keyboard navigation: `↑` `↓` `Enter` `Delete` `Esc`
-- Click to switch, hover for side preview
-- Dark/Light mode support
-
-## Install
-
-1. Download this folder
-2. Open `chrome://extensions/`
-3. Enable "Developer mode"
-4. Click "Load unpacked" → select folder
-
-## License
-
-MIT
+<p align="center">Quick tab switching with preview for Chrome</p>
 
 ---
 
-# VTS
+## Features
 
-Chrome 扩展，快速切换标签页并预览。
+- Press `Ctrl+Space` to open the tab switcher
+- Thumbnail preview for each tab
+- Keyboard navigation: `↑` `↓` `Enter` `Delete` `Esc`
+- Click to switch, hover for side preview
+- Dark/Light mode automatic support
+- Title overlay option for thumbnails
 
-## 功能
+## Screenshots
 
-- `Ctrl+Space` 打开切换器
-- 标签页缩略图预览
-- 键盘操作：`↑` `↓` `Enter` `Delete` `Esc`
-- 点击切换，悬停显示侧边预览
-- 支持深色/浅色模式
+![VTS Demo](./images/demo.jpg)
 
-## 安装
+## Installation
 
-1. 下载此文件夹
-2. 打开 `chrome://extensions/`
-3. 开启"开发者模式"
-4. 点击"加载已解压的扩展程序" → 选择文件夹
+1. Download this folder
+2. Open `chrome://extensions/` in Chrome
+3. Enable **Developer mode** (top right)
+4. Click **Load unpacked** → select the `vertical_tab_switcher` folder
 
-## 开源协议
+## Usage
 
-MIT
+| Key | Action |
+| --- | ------ |
+| `Ctrl+Space` | Open/Close switcher |
+| `↑` / `↓` | Navigate tabs |
+| `Enter` | Switch to selected tab |
+| `Delete` / `Backspace` | Close selected tab |
+| `Esc` | Close switcher |
+
+## Settings
+
+Click the extension icon to access settings:
+
+| Option | Description |
+| ------ | ----------- |
+| Preview | Show thumbnails in the list |
+| Overlay | Display title overlay on thumbnails |
+| Macro | Show side preview panel |
+
+## FAQ
+
+**Q: Why are some tabs missing thumbnails?**  
+A: Chrome restricts screenshots on certain pages (chrome://, edge://, etc.).
+
+**Q: Can I change the shortcut?**  
+A: Yes, go to `chrome://extensions/shortcuts` to customize.
+
+**Q: Does it work in incognito mode?**  
+A: Yes, enable "Allow in incognito" in extension details.
+
+## License
+
+MIT License
+
+## Author
+
+Created by [77-223255](https://github.com/77-223255)
+
+---
+
+*Last updated: 2026*

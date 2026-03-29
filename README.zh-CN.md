@@ -12,7 +12,7 @@
 
 | | 名称 | 描述 |
 | - | ---- | ---- |
-| <img src="vertical_tab_switcher/icons/icon128.png" width="32"> | [VTS](vertical_tab_switcher/) | 带预览的快速标签切换 |
+| <img src="VTS/icons/icon128.png" width="32"> | [VTS](VTS/) | 带预览的快速标签切换 |
 
 ## 开源协议
 

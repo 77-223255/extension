@@ -12,7 +12,7 @@
 
 | | Name | Description |
 | - | ---- | ----------- |
-| <img src="vertical_tab_switcher/icons/icon128.png" width="32"> | [VTS](vertical_tab_switcher/) | Quick tab switching with preview |
+| <img src="VTS/icons/icon128.png" width="32"> | [VTS](VTS/) | Quick tab switching with preview |
 
 ## License
 

@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "VTS - 竖直标签预览切换器",
+  "name": "VTS",
   "version": "1.0.0",
   "author": "77-223255",
   "homepage_url": "https://github.com/77-223255/extension",
@@ -10,7 +10,7 @@
   "host_permissions": ["<all_urls>"],
   "background": { "service_worker": "background.js" },
   "action": {
-    "default_title": "VTS - Ctrl+Space 快速切换",
+    "default_title": "VTS",
     "default_popup": "popup.html"
   },
   "commands": {

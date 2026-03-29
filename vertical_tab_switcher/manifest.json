@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "VTS",
+  "version": "1.0.0",
+  "description": "Ctrl+Space quick tab switcher with preview",
+  "permissions": ["tabs", "scripting", "commands", "storage", "alarms"],
+  "host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_title": "VTS", "default_popup": "popup.html" },
+  "commands": {
+    "open-overlay": {
+      "suggested_key": { "default": "Ctrl+Space", "mac": "Ctrl+Space" },
+      "description": "Open tab switcher"
+    }
+  },
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["content-script.js"],
+    "css": ["overlay.css"],
+    "run_at": "document_idle"
+  }],
+  "icons": { "16": "icons/icon16.png", "48": "icons/icon48.png", "128": "icons/icon128.png" }
+}

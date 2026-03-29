@@ -21,10 +21,6 @@
 - Dark/Light mode automatic support
 - Title overlay option for thumbnails
 
-## Screenshots
-
-![VTS Demo](./images/demo.jpg)
-
 ## Installation
 
 1. Download this folder

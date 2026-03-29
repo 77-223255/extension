@@ -65,7 +65,7 @@
 
 ## 开源协议
 
-MIT 协议
+本项目采用 MIT License 开源协议，详细内容请参阅根目录的 [LICENSE](../LICENSE) 文件。
 
 ## 作者
 

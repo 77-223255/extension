@@ -1,16 +1,17 @@
 {
   "manifest_version": 3,
-  "name": "VTS",
+  "name": "__MSG_extName__",
   "version": "1.0.0",
   "author": "77-223255",
   "homepage_url": "https://github.com/77-223255/extension",
   "minimum_chrome_version": "102",
-  "description": "Ctrl+Space 快捷键打开竖直标签列表，支持缩略图预览和侧边特写，快速切换浏览器标签页",
+  "default_locale": "en",
+  "description": "__MSG_extDescription__",
   "permissions": ["tabs", "scripting", "commands", "storage", "alarms"],
   "host_permissions": ["<all_urls>"],
   "background": { "service_worker": "background.js" },
   "action": {
-    "default_title": "VTS",
+    "default_title": "__MSG_extName__",
     "default_popup": "popup.html"
   },
   "commands": {

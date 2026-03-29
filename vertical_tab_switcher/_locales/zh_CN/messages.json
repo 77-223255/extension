@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "VTS - 竖直标签预览切换器",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Ctrl+Space打开竖直标签列表，支持缩略图预览和侧边特写，快速切换浏览器标签页",
+    "description": "Extension description"
+  }
+}

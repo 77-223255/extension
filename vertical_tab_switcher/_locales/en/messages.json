@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "VTS - Vertical Tab Switcher",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Ctrl+Space to open vertical tab list with thumbnail preview and side close-up, quickly switch browser tabs",
+    "description": "Extension description"
+  }
+}

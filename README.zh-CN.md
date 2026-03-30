@@ -2,7 +2,7 @@
   <a href="README.md">English</a> | <strong>简体中文</strong>
 </p>
 
-<h1 align="center">My Extensions</h1>
+<h1 align="center">我的扩展</h1>
 
 <p align="center">Chrome 生产力扩展集合</p>
 

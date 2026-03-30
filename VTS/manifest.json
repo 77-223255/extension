@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extName__",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "77-223255",
   "homepage_url": "https://github.com/77-223255/extension",
   "minimum_chrome_version": "102",
@@ -16,8 +16,12 @@
   },
   "commands": {
     "open-overlay": {
-      "suggested_key": { "default": "Ctrl+Space", "mac": "Ctrl+Space" },
+      "suggested_key": { "default": "Alt+Q", "mac": "Alt+Q" },
       "description": "Open tab switcher"
+    },
+    "navigate-up": {
+      "suggested_key": { "default": "Alt+Shift+Q", "mac": "Alt+Shift+Q" },
+      "description": "Navigate up in tab switcher"
     }
   },
   "content_scripts": [{

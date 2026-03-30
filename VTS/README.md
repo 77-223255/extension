@@ -8,65 +8,63 @@
 
 <h1 align="center">VTS</h1>
 
-<p align="center">Quick tab switching with preview for Chrome</p>
+<p align="center">Vertical Tab Switcher - Quick tab switching with thumbnail preview for Chrome</p>
 
 ---
 
 ## Features
 
-- Press `Ctrl+Space` to open the tab switcher
+- Press `Alt+Q` to open tab switcher, release `Alt` to switch
 - Thumbnail preview for each tab
 - Keyboard navigation: `↑` `↓` `Enter` `Delete` `Esc`
-- Click to switch, hover for side preview
-- Dark/Light mode automatic support
-- Title overlay option for thumbnails
+- Side preview panel on hover
+- Dark/Light mode auto-detection
+- Works with fullscreen video
 
 ## Installation
 
-1. Download this folder
+1. Download or clone this repository
 2. Open `chrome://extensions/` in Chrome
 3. Enable **Developer mode** (top right)
-4. Click **Load unpacked** → select the `vertical_tab_switcher` folder
+4. Click **Load unpacked** → select the `VTS` folder
 
 ## Usage
 
 | Key | Action |
 | --- | ------ |
-| `Ctrl+Space` | Open/Close switcher |
+| `Alt+Q` | Open switcher / navigate down |
+| `Alt+Shift+Q` | Navigate up |
 | `↑` / `↓` | Navigate tabs |
 | `Enter` | Switch to selected tab |
 | `Delete` / `Backspace` | Close selected tab |
 | `Esc` | Close switcher |
 
+Release `Alt` key to switch to selected tab and close.
+
 ## Settings
 
-Click the extension icon to access settings:
+Click the extension icon to toggle:
 
 | Option | Description |
 | ------ | ----------- |
-| Preview | Show thumbnails in the list |
-| Overlay | Display title overlay on thumbnails |
+| Preview | Show thumbnails in list |
 | Macro | Show side preview panel |
 
 ## FAQ
 
 **Q: Why are some tabs missing thumbnails?**  
-A: Chrome restricts screenshots on certain pages (chrome://, edge://, etc.).
+A: Chrome restricts screenshots on internal pages (chrome://, edge://, etc.).
 
 **Q: Can I change the shortcut?**  
-A: Yes, go to `chrome://extensions/shortcuts` to customize.
+A: Yes, go to `chrome://extensions/shortcuts`.
 
 **Q: Does it work in incognito mode?**  
 A: Yes, enable "Allow in incognito" in extension details.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](../LICENSE) file for details.
+MIT License - see [LICENSE](../LICENSE).
 
 ## Author
 
-Created by [77-223255](https://github.com/77-223255)
-
----
-
-*Last updated: 2026*
+[77-223255](https://github.com/77-223255)

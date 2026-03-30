@@ -1,5 +1,6 @@
 /**
- * background.js - Service Worker v1.0.0
+ * background.js - Service Worker v1.1.0
+ * Handles tab capture, caching, message routing
  */
 
 const cache = {
@@ -49,7 +50,7 @@ const cache = {
   }
 };
 
-const isAllowed = url => url && !['chrome://', 'edge://', 'about:', 'chrome-extension://'].some(p => url.startsWith(p));
+const isAllowed = url => url && !['chrome://', 'edge://', 'about:', 'chrome-extension://', 'file://'].some(p => url.startsWith(p));
 
 async function capture(tabId, windowId) {
   const now = Date.now(), c = cache.capturing.get(tabId);
@@ -74,8 +75,7 @@ const router = {
       tabs: tabs.map(t => ({
         id: t.id, title: t.title || '加载中...', favIconUrl: t.favIconUrl || '',
         active: t.active, thumbnail: cache.data.get(t.id)
-      })),
-      currentTabId: tab?.id
+      }))
     };
   },
 
@@ -90,7 +90,7 @@ const router = {
       cache.del(tabId), cache.capturing.delete(tabId);
       chrome.alarms.clear(`c_${tabId}`).catch(() => {});
       cache.timers.delete(tabId);
-      await cache.save();
+      cache.save();
       return { ok: true };
     } catch (e) { return { ok: false, error: e.message }; }
   }
@@ -128,13 +128,14 @@ chrome.tabs.onRemoved.addListener(id => {
 });
 
 chrome.commands.onCommand.addListener(cmd => {
-  if (cmd !== 'open-overlay') return;
+  if (cmd !== 'open-overlay' && cmd !== 'navigate-up') return;
   chrome.tabs.query({ active: true, currentWindow: true }, ([t]) => {
-    if (!t?.id) return;
-    chrome.tabs.sendMessage(t.id, { action: 'trigger' }, r => {
+    if (!t?.id || !isAllowed(t.url)) return;
+    const action = cmd === 'navigate-up' ? 'navigateUp' : 'trigger';
+    chrome.tabs.sendMessage(t.id, { action }, r => {
       if (chrome.runtime.lastError) {
         chrome.scripting.executeScript({ target: { tabId: t.id }, files: ['content-script.js'] })
-          .then(() => setTimeout(() => chrome.tabs.sendMessage(t.id, { action: 'trigger' }), 100));
+          .then(() => setTimeout(() => chrome.tabs.sendMessage(t.id, { action }), 100));
       }
     });
   });

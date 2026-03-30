@@ -4,7 +4,7 @@
     "description": "Extension name"
   },
   "extDescription": {
-    "message": "Ctrl+Space打开竖直标签列表，支持缩略图预览和侧边特写，快速切换浏览器标签页",
+    "message": "Alt+Q打开竖直标签列表，支持缩略图预览和侧边特写，快速切换浏览器标签页",
     "description": "Extension description"
   }
 }

@@ -12,11 +12,11 @@
 
 | | Name | Description |
 | - | ---- | ----------- |
-| <img src="VTS/icons/icon128.png" width="32"> | [VTS](VTS/) | Quick tab switching with preview |
+| <img src="VTS/icons/icon128.png" width="32"> | [VTS](VTS/) | Alt+Q tab switcher with thumbnail preview |
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](LICENSE).
 
 ---
 

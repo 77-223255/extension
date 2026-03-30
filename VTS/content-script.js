@@ -1,5 +1,6 @@
 /**
- * content-script.js - 竖直标签预览切换器 v1.0.0
+ * content-script.js - Vertical Tab Switcher v1.1.0
+ * Overlay UI with keyboard/mouse navigation and preview
  */
 
 ;(function () {
@@ -7,12 +8,18 @@
   if (window.__VTS) return;
   window.__VTS = true;
 
-  const S = { visible: false, busy: false, tabs: [], sel: 0, active: 0, settings: { thumbs: true, preview: true, overlay: true } };
+  const S = { visible: false, busy: false, tabs: [], sel: 0, active: 0, settings: { thumbs: true, preview: true }, altHeld: false, initialized: false };
   const on = (el, types, fn, opt) => types.split(' ').forEach(t => el.addEventListener(t, fn, opt));
+  
+  function calcLayout() {
+    const thumbH = S.settings.thumbs ? Math.max(52, Math.min(190, innerHeight * 0.09)) : 0;
+    document.documentElement.style.setProperty('--vts-h', (thumbH || 44) + 'px');
+  }
 
   const DOM = {
-    overlay: null, list: null, preview: null, savedOverflow: '',
-    _handler: null,
+    overlay: null, list: null, preview: null,
+    savedPosition: '', savedTop: '', savedWidth: '', savedScrollY: 0,
+    _handler: null, _container: null,
     
     create() {
       this.overlay = document.createElement('div');
@@ -23,37 +30,40 @@
       this.preview.className = 'vts-preview-popup';
       this.preview.innerHTML = '<img><div class="vts-preview-title"></div>';
       this.overlay.appendChild(this.list);
-      document.body.append(this.overlay, this.preview);
-      this.savedOverflow = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
+      this._container = document.fullscreenElement || document.body;
+      this._container.append(this.overlay, this.preview);
+      if (!document.fullscreenElement) {
+        this.savedScrollY = window.scrollY;
+        this.savedPosition = document.body.style.position;
+        this.savedTop = document.body.style.top;
+        this.savedWidth = document.body.style.width;
+        document.body.style.position = 'fixed';
+        document.body.style.top = -this.savedScrollY + 'px';
+        document.body.style.width = '100%';
+      }
       this.overlay.onclick = e => e.target === this.overlay && close();
       this._handler = onItemEvent;
-      on(this.list, 'click mousedown mousemove mouseup', this._handler, true);
-      this.list.addEventListener('mouseover', this._handler, true);
-      this.list.addEventListener('mouseout', this._handler, true);
+      on(this.list, 'click mousedown mousemove mouseup mouseover mouseout', this._handler, true);
     },
     
     destroy() {
       if (this._handler && this.list) {
-        this.list.removeEventListener('click', this._handler, true);
-        this.list.removeEventListener('mousedown', this._handler, true);
-        this.list.removeEventListener('mousemove', this._handler, true);
-        this.list.removeEventListener('mouseup', this._handler, true);
-        this.list.removeEventListener('mouseover', this._handler, true);
-        this.list.removeEventListener('mouseout', this._handler, true);
+        ['click', 'mousedown', 'mousemove', 'mouseup', 'mouseover', 'mouseout'].forEach(t => this.list.removeEventListener(t, this._handler, true));
       }
       this.overlay?.remove(), this.preview?.remove();
-      document.body.style.overflow = this.savedOverflow;
-      this.overlay = this.list = this.preview = this._handler = null;
+      if (this._container === document.body) {
+        document.body.style.position = this.savedPosition;
+        document.body.style.top = this.savedTop;
+        document.body.style.width = this.savedWidth;
+        window.scrollTo(0, this.savedScrollY);
+      }
+      this.overlay = this.list = this.preview = this._handler = this._container = null;
     }
   };
 
   const api = {
     send: msg => new Promise((res, rej) => chrome.runtime.sendMessage(msg, r => chrome.runtime.lastError ? rej() : res(r))),
-    getTabs: async () => {
-      const r = await api.send({ action: 'getTabsAndCapture' });
-      return r?.tabs || [];
-    }
+    getTabs: () => api.send({ action: 'getTabsAndCapture' }).then(r => r?.tabs || [])
   };
 
   function render() {
@@ -68,7 +78,7 @@
   function createItem(tab, idx) {
     const hasThumb = S.settings.thumbs && tab.thumbnail;
     const el = document.createElement('div');
-    el.className = 'vts-tab-item' + (tab.active ? ' vts-active-tab' : '') + (hasThumb ? '' : ' vts-native-mode') + (hasThumb && S.settings.overlay ? ' vts-overlay-mode' : '');
+    el.className = 'vts-tab-item' + (tab.active ? ' vts-active-tab' : '') + (hasThumb ? ' vts-overlay-mode' : ' vts-native-mode');
     el.dataset.idx = idx;
     
     const bar = document.createElement('div');
@@ -109,57 +119,87 @@
     if (!items?.length) return;
     items.forEach((el, i) => el.classList.toggle('vts-selected', i === S.sel));
     if (scroll) items[S.sel]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    showPreview(S.tabs[S.sel]);
+  }
+
+  function positionList() {
+    if (!DOM.list) return;
+    if (S.settings.preview) {
+      const edge = Math.max(32, innerWidth * 0.03);
+      const gap = 32;
+      const listW = 280;
+      const previewW = Math.min(innerWidth * 0.35, innerHeight * 0.6);
+      const listX = (innerWidth - listW - gap - previewW) / 2;
+      DOM.list.style.cssText = `position:absolute;left:${listX}px;top:50%;transform:translateY(-50%)`;
+    } else {
+      DOM.list.style.cssText = '';
+    }
   }
 
   function showPreview(tab) {
-    if (!S.settings.preview || !tab?.thumbnail) return hidePreview();
+    if (!S.settings.preview || !tab?.thumbnail) {
+      DOM.preview?.classList.remove('vts-visible');
+      return;
+    }
     const img = DOM.preview.querySelector('img');
     DOM.preview.querySelector('.vts-preview-title').textContent = tab.title;
     img.onload = () => {
-      const gap = Math.max(8, innerWidth * 0.02);
-      const listL = DOM.list.getBoundingClientRect().left;
-      const maxW = listL - gap * 2, maxH = innerHeight - gap * 2 - 28;
+      const edge = Math.max(32, innerWidth * 0.03);
+      const gap = 32;
+      const listW = 280;
+      const titleH = 28;
+      const availW = innerWidth - edge * 2 - listW - gap;
+      const availH = innerHeight - edge * 2 - titleH;
       const ratio = img.naturalWidth / img.naturalHeight;
-      const w = Math.min(maxW, maxH * ratio), h = w / ratio;
-      Object.assign(DOM.preview.style, { width: w + 'px', height: h + 28 + 'px', left: gap + 'px', top: (innerHeight - h - 28) / 2 + 'px' });
+      let w = Math.min(availW, availH * ratio);
+      let h = w / ratio;
+      if (h > availH) { h = availH; w = h * ratio; }
+      const totalW = listW + gap + w;
+      const listX = (innerWidth - totalW) / 2;
+      const previewX = listX + listW + gap;
+      const previewY = (innerHeight - h - titleH) / 2;
+      DOM.list.style.left = listX + 'px';
+      Object.assign(DOM.preview.style, { width: w + 'px', height: h + titleH + 'px', left: previewX + 'px', top: previewY + 'px' });
       DOM.preview.classList.add('vts-visible');
     };
     img.src = tab.thumbnail;
   }
 
-  function hidePreview() { DOM.preview?.classList.remove('vts-visible'); }
-
   async function open() {
     if (S.visible) return close();
     if (S.busy) return;
     S.busy = true;
+    S.altHeld = true;
     try {
       const { vts_settings: s = {} } = await chrome.storage.local.get('vts_settings');
       S.settings.thumbs = s.showThumbnailsInList ?? true;
       S.settings.preview = s.showSidePreview ?? true;
-      S.settings.overlay = s.titleOverlay ?? true;
       S.tabs = await api.getTabs();
       if (!S.tabs.length) return;
-      S.sel = Math.max(0, S.tabs.findIndex(t => t.active));
-      S.active = S.sel;
+      S.sel = S.active = Math.max(0, S.tabs.findIndex(t => t.active));
+      calcLayout();
       DOM.create();
       render();
+      positionList();
       DOM.overlay.classList.add('vts-active');
       S.visible = true;
+      S.initialized = false;
     } finally { S.busy = false; }
   }
 
   function close() {
     if (!S.visible) return;
-    hidePreview();
+    DOM.preview?.classList.remove('vts-visible');
     S.visible = S.busy = false;
+    S.altHeld = S.initialized = false;
+    if (DOM.list) DOM.list.style.cssText = '';
     DOM.overlay.classList.add('vts-fading-out');
     DOM.overlay.classList.remove('vts-active');
     setTimeout(() => { DOM.list.innerHTML = ''; DOM.destroy(); }, 150);
   }
 
   async function closeTab(id) {
-    hidePreview();
+    DOM.preview?.classList.remove('vts-visible');
     await api.send({ action: 'closeTab', tabId: id });
     const idx = S.tabs.findIndex(t => t.id === id);
     if (idx < 0) return;
@@ -167,12 +207,16 @@
     if (!S.tabs.length) return close();
     if (S.sel >= S.tabs.length) S.sel = S.tabs.length - 1;
     else if (idx < S.sel) S.sel--;
+    calcLayout();
     render();
   }
 
   let timer, pressing, lastItem = null;
   
   function onItemEvent(e) {
+    if (!S.visible) return;
+    if (e.type === 'mousemove') return S.initialized = true, clearTimeout(timer);
+    if (e.type === 'mouseover' && !S.initialized) return;
     const item = e.target.closest('.vts-tab-item');
     
     if (e.type === 'mouseover') {
@@ -182,7 +226,6 @@
       if (!tab) return;
       S.sel = idx;
       updateSel();
-      showPreview(tab);
       return;
     }
     
@@ -191,9 +234,11 @@
       const related = e.relatedTarget?.closest('.vts-tab-item');
       if (related === item) return;
       if (item === lastItem) lastItem = null;
-      hidePreview();
       clearTimeout(timer);
-      if (S.sel !== S.active) { S.sel = S.active; updateSel(); }
+      if (!related) {
+        S.sel = S.active;
+        updateSel();
+      }
       return;
     }
     
@@ -208,16 +253,11 @@
       pressing = false;
     }
     if (e.type === 'mousedown' && e.button === 0 && !isClose) {
-      timer = setTimeout(() => { pressing = true; showPreview(tab); }, 400);
+      timer = setTimeout(() => pressing = true, 400);
     }
-    if (e.type === 'mousemove') clearTimeout(timer);
   }
 
   on(document, 'keydown', e => {
-    if (e.key === ' ' && e.ctrlKey && !e.shiftKey) {
-      e.preventDefault();
-      return S.visible ? close() : open();
-    }
     if (!S.visible) return;
     if (e.key === 'ArrowUp') S.sel = (S.sel - 1 + S.tabs.length) % S.tabs.length, updateSel(1);
     else if (e.key === 'ArrowDown') S.sel = (S.sel + 1) % S.tabs.length, updateSel(1);
@@ -228,8 +268,25 @@
     e.preventDefault();
   }, true);
 
+  on(document, 'keyup', e => {
+    if (e.key === 'Alt' && S.visible && S.altHeld) {
+      S.altHeld = false;
+      if (S.tabs[S.sel]) api.send({ action: 'switchTab', tabId: S.tabs[S.sel].id });
+      close();
+    }
+  }, true);
+
   chrome.runtime.onMessage.addListener((msg, _, send) => {
-    if (msg.action === 'trigger') open(), send({ ok: true });
+    if (msg.action === 'trigger') {
+      if (S.visible) S.sel = (S.sel + 1) % S.tabs.length, updateSel(1);
+      else open();
+      send({ ok: true });
+    }
+    if (msg.action === 'navigateUp') {
+      if (S.visible) S.sel = (S.sel - 1 + S.tabs.length) % S.tabs.length, updateSel(1);
+      else open();
+      send({ ok: true });
+    }
     return true;
   });
 })();

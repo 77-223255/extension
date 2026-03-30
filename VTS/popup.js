@@ -1,5 +1,5 @@
 /**
- * popup.js - 设置窗口 v1.0.0
+ * popup.js - Settings popup v1.1.0
  */
 
 const i18n = {
@@ -8,18 +8,20 @@ const i18n = {
     thumbOff: '无预览',
     previewOn: '特写',
     previewOff: '无特写',
-    overlayOn: '覆盖',
-    overlayOff: '无覆盖'
+    unsupportedTitle: '不支持此页面',
+    unsupportedMessage: '浏览器内部页面（如新标签页、扩展设置页等）无法使用此扩展功能。'
   },
   en: {
     thumbOn: 'PREVIEW',
     thumbOff: 'NO PREVIEW',
     previewOn: 'MACRO',
     previewOff: 'NO MACRO',
-    overlayOn: 'OVERLAY',
-    overlayOff: 'NO OVERLAY'
+    unsupportedTitle: 'Unsupported Page',
+    unsupportedMessage: 'Browser internal pages (new tab, extension settings, etc.) cannot use this extension.'
   }
 };
+
+const isInternal = url => url && ['chrome://', 'edge://', 'about:', 'chrome-extension://', 'file://'].some(p => url.startsWith(p));
 
 let lang = 'zh';
 
@@ -29,37 +31,32 @@ async function init() {
   
   const optThumb = document.getElementById('optThumb');
   const optPreview = document.getElementById('optPreview');
-  const optOverlay = document.getElementById('optOverlay');
   const langBtn = document.getElementById('langBtn');
-  const divBeforeOverlay = document.getElementById('divBeforeOverlay');
-  const divAfterOverlay = document.getElementById('divAfterOverlay');
-  
-  function applyLang() {
-    const hasThumb = s.showThumbnailsInList ?? true;
-    const hasPreview = s.showSidePreview ?? true;
-    const hasOverlay = s.titleOverlay ?? true;
-    
-    optThumb.querySelector('.option-text').textContent = hasThumb ? i18n[lang].thumbOn : i18n[lang].thumbOff;
-    optPreview.querySelector('.option-text').textContent = hasPreview ? i18n[lang].previewOn : i18n[lang].previewOff;
-    optOverlay.querySelector('.option-text').textContent = hasOverlay ? i18n[lang].overlayOn : i18n[lang].overlayOff;
-    langBtn.textContent = lang === 'zh' ? '中文 / EN' : 'EN / 中文';
-  }
   
   function applyState() {
     const hasThumb = s.showThumbnailsInList ?? true;
     const hasPreview = s.showSidePreview ?? true;
-    const hasOverlay = s.titleOverlay ?? true;
-    
     optThumb.classList.toggle('on', hasThumb);
     optPreview.classList.toggle('on', hasPreview);
-    optOverlay.classList.toggle('on', hasOverlay);
-    optOverlay.classList.toggle('disabled', !hasThumb);
-    divBeforeOverlay.classList.toggle('collapsed', !hasThumb);
-    divAfterOverlay.classList.toggle('collapsed', !hasThumb);
-    
-    optOverlay.querySelector('.option-img').style.width = hasThumb ? '100%' : '0';
-    
-    applyLang();
+    optThumb.querySelector('.option-text').textContent = hasThumb ? i18n[lang].thumbOn : i18n[lang].thumbOff;
+    optPreview.querySelector('.option-text').textContent = hasPreview ? i18n[lang].previewOn : i18n[lang].previewOff;
+    langBtn.textContent = lang === 'zh' ? '中文 / EN' : 'EN / 中文';
+  }
+  
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (tab && isInternal(tab.url)) {
+    document.body.classList.add('unsupported');
+    document.getElementById('unsupportedTitle').textContent = i18n[lang].unsupportedTitle;
+    document.getElementById('unsupportedMessage').textContent = i18n[lang].unsupportedMessage;
+    applyState();
+    langBtn.onclick = () => {
+      lang = lang === 'zh' ? 'en' : 'zh';
+      chrome.storage.local.set({ vts_lang: lang });
+      document.getElementById('unsupportedTitle').textContent = i18n[lang].unsupportedTitle;
+      document.getElementById('unsupportedMessage').textContent = i18n[lang].unsupportedMessage;
+      applyState();
+    };
+    return;
   }
   
   function save() {
@@ -76,16 +73,10 @@ async function init() {
     applyState(); save();
   };
   
-  optOverlay.onclick = () => {
-    if (!(s.showThumbnailsInList ?? true)) return;
-    s.titleOverlay = !(s.titleOverlay ?? true);
-    applyState(); save();
-  };
-  
   langBtn.onclick = () => {
     lang = lang === 'zh' ? 'en' : 'zh';
     chrome.storage.local.set({ vts_lang: lang });
-    applyLang();
+    applyState();
   };
   
   applyState();

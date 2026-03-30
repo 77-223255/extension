@@ -1,5 +1,5 @@
 /**
- * overlay.css - 竖直标签预览切换器样式 v1.0.0
+ * overlay.css - Vertical Tab Switcher styles v1.1.0
  */
 
 :root {
@@ -14,10 +14,8 @@
   --vts-bg-h: rgba(50, 50, 55, 0.92);
   --vts-text: #e0e0e0;
   --vts-muted: #d0d0d0;
-  --vts-close: #aaa;
-  --vts-close-h: #ef4444;
   --vts-dur: 0.15s;
-  --vts-h: clamp(52px, 9vh, 190px);
+  --vts-h: 130px;
 }
 
 .vts-overlay {
@@ -47,14 +45,13 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  max-height: 80vh;
   width: 280px;
   max-width: 90vw;
+  max-height: 90vh;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 16px 12px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.2) transparent;
+  scrollbar-width: none;
   background: rgba(30, 30, 30, 0.65);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -63,15 +60,15 @@
   box-sizing: border-box;
 }
 
-.vts-tab-list::-webkit-scrollbar { width: 6px; }
-.vts-tab-list::-webkit-scrollbar-track { background: transparent; }
-.vts-tab-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+.vts-tab-list::-webkit-scrollbar { display: none; }
 
 .vts-tab-item {
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   width: 100%;
   height: var(--vts-h);
+  min-height: var(--vts-h);
   border-radius: 8px;
   background: var(--vts-bg);
   border: 2px solid transparent;
@@ -96,7 +93,7 @@
 }
 
 .vts-close-btn {
-  color: var(--vts-close);
+  color: #aaa;
   font-size: 22px;
   font-weight: 300;
   cursor: pointer;
@@ -108,11 +105,12 @@
   padding-right: 2px;
 }
 
-.vts-tab-item:hover .vts-close-btn { opacity: 1; color: var(--vts-close-h); }
+.vts-tab-item:hover .vts-close-btn { opacity: 1; color: #ef4444; }
 .vts-tab-thumbnail > img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
 
 .vts-tab-item.vts-native-mode {
   height: 44px;
+  min-height: 44px;
   flex-direction: row;
   align-items: center;
 }
@@ -148,15 +146,6 @@
   font-size: 15px;
   font-weight: 500;
   text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-}
-
-.vts-tab-item:not(.vts-overlay-mode) .vts-tab-thumbnail .vts-tab-title-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 5;
-  background: rgba(0,0,0,0.35);
 }
 
 .vts-tab-favicon { 
@@ -198,21 +187,19 @@
 }
 
 .vts-preview-popup.vts-visible { opacity: 1; transform: scale(1); }
-.vts-preview-popup img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.vts-preview-popup img { width: 100%; height: 100%; object-fit: contain; object-position: top; display: block; }
 
 .vts-preview-popup .vts-preview-title {
   position: absolute;
   inset: auto 0 0 0;
   padding: 6px 10px;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.35);
   color: var(--vts-text);
   font-size: 12px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-.vts-empty-message { color: rgba(255,255,255,0.5); font-size: 14px; padding: 24px 16px; text-align: center; }
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -226,9 +213,14 @@
     --vts-bg-h: rgba(250,250,250,0.95);
     --vts-text: #1a1a1a;
     --vts-muted: #333;
-    --vts-close: #666;
   }
   .vts-tab-list { background: rgba(255,255,255,0.65); }
+  .vts-tab-item.vts-overlay-mode .vts-tab-thumbnail .vts-tab-title-bar { background: rgba(255,255,255,0.25); }
+  .vts-tab-item.vts-overlay-mode .vts-tab-thumbnail .vts-tab-title-bar .vts-tab-title { text-shadow: 0 1px 3px rgba(255,255,255,0.6); }
+  .vts-preview-popup { background: rgba(255,255,255,0.95); }
+  .vts-preview-popup .vts-preview-title { background: rgba(255,255,255,0.5); }
+  .vts-close-btn { color: #666; }
+  .vts-tab-item:hover .vts-close-btn { color: #ef4444; }
 }
 
 .vts-tab-item, .vts-tab-item * { outline: none; -webkit-tap-highlight-color: transparent; }

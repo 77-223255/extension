@@ -63,7 +63,3 @@ A: Some shortcuts may be intercepted when focus is on browser input fields. Reco
 ## License
 
 MIT License - see [LICENSE](../LICENSE).
-
-## Author
-
-[77-223255](https://github.com/77-223255)

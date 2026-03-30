@@ -63,7 +63,3 @@
 ## 开源协议
 
 MIT License - 详见 [LICENSE](../LICENSE)。
-
-## 作者
-
-[77-223255](https://github.com/77-223255)

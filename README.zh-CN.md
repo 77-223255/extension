@@ -12,7 +12,7 @@
 
 | | 名称 | 描述 |
 | - | ---- | ---- |
-| <img src="VTS/icons/icon128.png" width="32"> | [VTS](VTS/) | 带预览的快速标签切换 |
+| <img src="VTS/icons/icon128.png" width="32"> | [VTS](VTS/) | Alt+Q 标签切换器，支持缩略图和侧边预览 |
 
 ## 开源协议
 

@@ -14,18 +14,13 @@
 
 ## Features
 
-- Press `Alt+Q` to open switcher, release `Alt` to switch
 - Thumbnail preview for each tab
-- Keyboard navigation: `↑` `↓` `Enter` `Delete` `Esc`
-- Mouse hover to select, click to switch
-- Side preview panel on hover
 - Dark/Light mode auto-detection
-- Works with fullscreen video
 
 ## Installation
 
 1. Download or clone this repository
-2. Open `chrome://extensions/` in Chrome
+2. Open `chrome://extensions/` in Chrome (or `edge://extensions/` in Edge)
 3. Enable **Developer mode** (top right)
 4. Click **Load unpacked** → select the `VTS` folder
 
@@ -41,8 +36,6 @@
 | `Esc` | Close switcher |
 | Click background | Close switcher |
 | Click `×` | Close tab |
-
-Release `Alt` key to switch to selected tab and close.
 
 ## Settings
 
@@ -63,6 +56,9 @@ A: Yes, go to `chrome://extensions/shortcuts`.
 
 **Q: Does it work in incognito mode?**  
 A: Yes, enable "Allow in incognito" in extension details.
+
+**Q: Why doesn't the shortcut work sometimes?**  
+A: Some shortcuts may be intercepted when focus is on browser input fields. Recommended to use default shortcuts, or try different combinations.
 
 ## License
 

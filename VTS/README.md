@@ -14,9 +14,10 @@
 
 ## Features
 
-- Press `Alt+Q` to open tab switcher, release `Alt` to switch
+- Press `Alt+Q` to open switcher, release `Alt` to switch
 - Thumbnail preview for each tab
 - Keyboard navigation: `↑` `↓` `Enter` `Delete` `Esc`
+- Mouse hover to select, click to switch
 - Side preview panel on hover
 - Dark/Light mode auto-detection
 - Works with fullscreen video
@@ -38,6 +39,8 @@
 | `Enter` | Switch to selected tab |
 | `Delete` / `Backspace` | Close selected tab |
 | `Esc` | Close switcher |
+| Click background | Close switcher |
+| Click `×` | Close tab |
 
 Release `Alt` key to switch to selected tab and close.
 

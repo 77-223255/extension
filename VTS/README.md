@@ -12,6 +12,10 @@
 
 ---
 
+<p align="center">
+  <img src="README_IMAGE/VTS_long.PNG" alt="VTS Screenshot">
+</p>
+
 ## Features
 
 - Thumbnail preview for each tab

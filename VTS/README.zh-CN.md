@@ -8,7 +8,7 @@
 
 <h1 align="center">VTS</h1>
 
-<p align="center">竖直标签切换器 - Chrome 快速标签切换，支持缩略图预览</p>
+<p align="center">竖直标签切换器 - 快速标签切换，支持缩略图预览</p>
 
 ---
 
@@ -24,7 +24,7 @@
 ## 安装方法
 
 1. 下载或克隆本仓库
-2. 在 Chrome 中打开 `chrome://extensions/`（或 Edge 中打开 `edge://extensions/`）
+2. 在 Edge 中打开 `edge://extensions/`
 3. 启用右上角的**开发者模式**
 4. 点击**加载已解压的扩展程序** → 选择 `VTS` 文件夹
 
@@ -53,10 +53,10 @@
 ## 常见问题
 
 **问：为什么有些标签没有缩略图？**  
-答：Chrome 限制了对内部页面（chrome://、edge:// 等）的截图。
+答：Edge 限制了对内部页面（chrome://、edge:// 等）的截图。
 
 **问：可以修改快捷键吗？**  
-答：可以，访问 `chrome://extensions/shortcuts`。
+答：可以，访问 `edge://extensions/shortcuts`。
 
 **问：隐身模式下能用吗？**  
 答：可以，在扩展详情页启用"在隐身模式下启用"。

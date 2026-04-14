@@ -8,7 +8,7 @@
 
 <h1 align="center">VTS</h1>
 
-<p align="center">Vertical Tab Switcher - Quick tab switching with thumbnail preview for Chrome</p>
+<p align="center">Vertical Tab Switcher - Quick tab switching with thumbnail preview </p>
 
 ---
 

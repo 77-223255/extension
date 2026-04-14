@@ -24,7 +24,7 @@
 ## Installation
 
 1. Download or clone this repository
-2. Open `chrome://extensions/` in Chrome (or `edge://extensions/` in Edge)
+2. Open `edge://extensions/` in Edge
 3. Enable **Developer mode** (top right)
 4. Click **Load unpacked** → select the `VTS` folder
 
@@ -56,7 +56,7 @@ Click the extension icon to toggle:
 A: Chrome restricts screenshots on internal pages (chrome://, edge://, etc.).
 
 **Q: Can I change the shortcut?**  
-A: Yes, go to `chrome://extensions/shortcuts`.
+A: Yes, go to `edge://extensions/shortcuts`.
 
 **Q: Does it work in incognito mode?**  
 A: Yes, enable "Allow in incognito" in extension details.

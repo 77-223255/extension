@@ -12,8 +12,6 @@
 
 ---
 
-[Changelog](../CHANGELOG.md)
-
 ## Features
 
 - Thumbnail preview for each tab
@@ -61,6 +59,8 @@ A: Yes, enable "Allow in incognito" in extension details.
 
 **Q: Why doesn't the shortcut work sometimes?**  
 A: Some shortcuts may be intercepted when focus is on browser input fields. Recommended to use default shortcuts, or try different combinations.
+
+[Changelog](../CHANGELOG.md)
 
 ## License
 

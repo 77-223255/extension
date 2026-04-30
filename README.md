@@ -8,13 +8,13 @@
 
 ---
 
-[Changelog](CHANGELOG.md)
-
 ## Extensions
 
 | | Name | Description |
 | - | ---- | ----------- |
 | <img src="VTS/icons/icon128.png" width="32"> | [VTS](VTS/) | Alt+Q tab switcher with thumbnail and side preview |
+
+[Changelog](CHANGELOG.md)
 
 ## License
 

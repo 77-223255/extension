@@ -14,8 +14,6 @@
 | - | ---- | ---- |
 | <img src="VTS/icons/icon128.png" width="32"> | [VTS](VTS/) | Alt+Q 标签切换器，支持缩略图和侧边预览 |
 
-[更新日志](CHANGELOG.md)
-
 ## 开源协议
 
 本项目采用 MIT License 开源协议，详细内容请参阅根目录的 [LICENSE](LICENSE) 文件。

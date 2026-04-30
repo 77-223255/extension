@@ -12,9 +12,7 @@
 
 ---
 
-<p align="center">
-  <img src="README_IMAGE/VTS_long.PNG" alt="VTS 截图">
-</p>
+[更新日志](../CHANGELOG.md)
 
 ## 功能特点
 

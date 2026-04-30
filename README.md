@@ -8,6 +8,8 @@
 
 ---
 
+[Changelog](CHANGELOG.md)
+
 ## Extensions
 
 | | Name | Description |

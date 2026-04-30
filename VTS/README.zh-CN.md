@@ -12,6 +12,10 @@
 
 ---
 
+<p align="center">
+  <img src="README_IMAGE/VTS_long.PNG" alt="VTS 截图">
+</p>
+
 ## 功能特点
 
 - 每个标签页显示缩略图预览

@@ -1,5 +1,5 @@
 /**
- * popup.js - Settings popup v1.1.0
+ * popup.js - Settings popup v1.1.2
  */
 
 const i18n = {

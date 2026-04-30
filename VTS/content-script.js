@@ -1,5 +1,5 @@
 /**
- * content-script.js - Vertical Tab Switcher v1.1.0
+ * content-script.js - Vertical Tab Switcher v1.1.2
  * Overlay UI with keyboard/mouse navigation and preview
  */
 
@@ -14,6 +14,15 @@
   function calcLayout() {
     const thumbH = S.settings.thumbs ? Math.max(52, Math.min(190, innerHeight * 0.09)) : 0;
     document.documentElement.style.setProperty('--vts-h', (thumbH || 44) + 'px');
+  }
+
+  function getImageNaturalSize(dataUrl) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve({ w: img.naturalWidth, h: img.naturalHeight });
+      img.onerror = () => resolve({ w: 0, h: 0 });
+      img.src = dataUrl;
+    });
   }
 
   const DOM = {
@@ -122,9 +131,23 @@
     showPreview(S.tabs[S.sel]);
   }
 
-  function positionList() {
+  function positionList(previewSize = null) {
     if (!DOM.list) return;
-    if (S.settings.preview) {
+    if (S.settings.preview && previewSize?.w > 0) {
+      const edge = Math.max(32, innerWidth * 0.03);
+      const gap = 32;
+      const listW = 280;
+      const titleH = 28;
+      const availW = innerWidth - edge * 2 - listW - gap;
+      const availH = innerHeight - edge * 2 - titleH;
+      const ratio = previewSize.w / previewSize.h;
+      let w = Math.min(availW, availH * ratio);
+      let h = w / ratio;
+      if (h > availH) { h = availH; w = h * ratio; }
+      const totalW = listW + gap + w;
+      const listX = (innerWidth - totalW) / 2;
+      DOM.list.style.cssText = `position:absolute;left:${listX}px;top:50%;transform:translateY(-50%)`;
+    } else if (S.settings.preview) {
       const edge = Math.max(32, innerWidth * 0.03);
       const gap = 32;
       const listW = 280;
@@ -154,11 +177,9 @@
       let w = Math.min(availW, availH * ratio);
       let h = w / ratio;
       if (h > availH) { h = availH; w = h * ratio; }
-      const totalW = listW + gap + w;
-      const listX = (innerWidth - totalW) / 2;
-      const previewX = listX + listW + gap;
+      const listRect = DOM.list.getBoundingClientRect();
+      const previewX = listRect.right + gap;
       const previewY = (innerHeight - h - titleH) / 2;
-      DOM.list.style.left = listX + 'px';
       Object.assign(DOM.preview.style, { width: w + 'px', height: h + titleH + 'px', left: previewX + 'px', top: previewY + 'px' });
       DOM.preview.classList.add('vts-visible');
     };
@@ -177,10 +198,16 @@
       S.tabs = await api.getTabs();
       if (!S.tabs.length) return;
       S.sel = S.active = Math.max(0, S.tabs.findIndex(t => t.active));
+
+      let initialPreviewSize = null;
+      if (S.settings.preview && S.tabs[S.sel]?.thumbnail) {
+        initialPreviewSize = await getImageNaturalSize(S.tabs[S.sel].thumbnail);
+      }
+
       calcLayout();
       DOM.create();
       render();
-      positionList();
+      positionList(initialPreviewSize);
       DOM.overlay.classList.add('vts-active');
       S.visible = true;
       S.initialized = false;
